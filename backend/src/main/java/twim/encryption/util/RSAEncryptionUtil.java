@@ -22,8 +22,8 @@ public class RSAEncryptionUtil {
   public static final String ALGORITHM = "RSA";
   public static final int KEY_SIZE = 2048;
 
-  public static final String PRIVATE_KEY_FILE = "src/keys/private.key";
-  public static final String PUBLIC_KEY_FILE = "src/keys/public.key";
+  public static final String PRIVATE_KEY_FILE = "src/keys/rsa_private.key";
+  public static final String PUBLIC_KEY_FILE = "src/keys/rsa_public.key";
   
   public static void generateKey() {
     try {
