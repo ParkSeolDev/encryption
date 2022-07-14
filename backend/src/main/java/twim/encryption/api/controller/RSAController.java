@@ -1,45 +1,49 @@
 package twim.encryption.api.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import twim.encryption.api.service.RSAService;
+import twim.encryption.util.RSAEncryptionUtil;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 
-
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rsa")
 public class RSAController {
 	
-	private final RSAService rsaService;
+	private final RSAEncryptionUtil rsaEncryptionUtil;
 
 	@GetMapping("/generateKey")
-	public String generateKey() {
-		return rsaService.generatedKey().toString();
+	public KeyPair generateKey() throws NoSuchAlgorithmException {
+		return rsaEncryptionUtil.genRSAKeyPair();
 	}
 	
 	@GetMapping("/getPublicKey")
-	public String getPublicKey() {
-		return rsaService.getPublicKeyString();
+	public PublicKey getPublicKey(String base64PublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		return rsaEncryptionUtil.getPublicKeyFromBase64Encrypted(base64PublicKey);
+	}
+
+	@GetMapping("/getPrivateKey")
+	public PrivateKey getPrivateKey(String base64PrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		return rsaEncryptionUtil.getPrivateKeyFromBase64Encrypted(base64PrivateKey);
+	}
+
+	@PostMapping("/encrypt")
+	public String encrypt(@RequestParam(value = "plainText") String plainText, PublicKey publicKey) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+		return rsaEncryptionUtil.encryptRSA(plainText, publicKey);
 	}
 	
-	@PostMapping("/encryptByPublicKey")
-	public String encryptByPublicKey(@RequestParam(value = "plainText") String plainText) {
-		return rsaService.encryptByPublicKey(plainText);
+	@PostMapping("/decrypt")
+	public String decrypt(@RequestParam(value = "encryptText") String encryptText, PrivateKey privateKey) throws NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+		return rsaEncryptionUtil.decryptRSA(encryptText, privateKey);
 	}
-	
-	@PostMapping("/decryptByPrivateKey")
-	public String decryptByPrivateKey(@RequestParam(value = "encryptText") String encryptText) {
-		return rsaService.decryptByPrivateKey(encryptText);
-	}
-	
-	@PostMapping("/encryptWithPublicKeyParam")
-	public String encryptWithPublicKeyParam(@RequestParam(value = "plainText") String plainText, @RequestParam(value = "publicKey") String publicKey) {
-		return rsaService.encryptWithPublicKeyParam(plainText, publicKey);
-	}
+
 }

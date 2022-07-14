@@ -8,8 +8,10 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
 //양방향 암호화 알고리즘인 AES256 암호화를 지원하는 클래스
+@Component
 public class AESEncryptionUtil {
 	private String iv;
 	private Key keySpec;
