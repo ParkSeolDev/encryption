@@ -8,11 +8,11 @@ var data1 = "Park Seol";
 var key = "";
 var num = "";
 var dataEncrypted = "";
-var privateKey = "";
+var RSAprivateKey = "";
 var keyEncrypted = "";
 var aesKey = "";
 var formdata = new FormData();
-var data2 = "";
+var dataResult = "";
 
 const handleClick = function () {
   window.alert("hello");
@@ -26,7 +26,7 @@ const decryptClick = function () {
 
 const dataClick = function () {
   decryptData();
-  console.log(data2);
+  console.log(dataResult);
 };
 
 keyBtn.onclick = handleClick;
@@ -45,7 +45,7 @@ function getKey() {
   request.onload = () => {
     console.log(request.response);
     key = JSON.parse(request.response).publicKey;
-    privateKey = JSON.parse(request.response).privateKey;
+    RSAprivateKey = JSON.parse(request.response).privateKey;
     console.log(key);
     // num : 대칭키
     num = guid();
@@ -77,7 +77,7 @@ const requestPost = new XMLHttpRequest();
 const apiPost = `http://localhost:8080/api/v1/rsa/decrypt`;
 
 formdata.append("encryptText", keyEncrypted);
-formdata.append("privateKey", privateKey);
+formdata.append("privateKey", RSAprivateKey);
 /*
 function decryptKey() {
   console.log("sssss");
@@ -95,27 +95,38 @@ function decryptKey() {
   fetch("http://localhost:8080/api/v1/rsa/decrypt", {
     method: "POST",
     cache: "no-cache",
+    headers: {
+      Accept: "application/json",
+    },
     // body: formdata, // body 부분에 폼데이터 변수를 할당
     body: new URLSearchParams({
       // 일반 객체를 fordata형식으로 변환해주는 클래스
       encryptText: keyEncrypted,
-      privateKey: privateKey,
+      privateKey: RSAprivateKey,
     }),
   }).then((response) => (aesKey = response.text()));
+
+  // .then((response) => response.json())
+  // .then((data) => console.log(data.toString()));
+
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
+  // }).then((response) => (aesKey = JSON.stringify(response)));
 }
 
 function decryptData() {
   fetch("http://localhost:8080/api/v1/aes/decrypt", {
     method: "POST",
     cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
     // body: formdata, // body 부분에 폼데이터 변수를 할당
     body: new URLSearchParams({
       // 일반 객체를 fordata형식으로 변환해주는 클래스
-      str: dataEncrypted,
       key: aesKey,
+      encryptedData: dataEncrypted,
     }),
-  }).then((response) => (data2 = response.text()));
+  }).then((response) => (dataResult = response.text()));
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
 }
 /*

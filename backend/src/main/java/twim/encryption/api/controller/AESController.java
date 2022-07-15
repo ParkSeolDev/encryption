@@ -19,7 +19,7 @@ public class AESController {
     }
 
     @PostMapping("/decrypt")
-    public String decrypt(@RequestParam String key, @RequestParam String encryptedData) throws Exception {
+    public String decrypt(@RequestParam(value = "key") String key, @RequestParam(value = "encryptedData") String encryptedData) throws Exception {
         return aes256Utils.decrypt(key, encryptedData);
     }
 }
