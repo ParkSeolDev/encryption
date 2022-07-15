@@ -33,6 +33,7 @@ dependencies {
 	implementation group: 'cn.hutool', name: 'hutool-all', version: '5.8.1'
 	// https://mvnrepository.com/artifact/commons-codec/commons-codec
 	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+	implementation 'cn.shuibo:rsa-encrypt-body-spring-boot:1.0.1.RELEASE'
 
 }
 

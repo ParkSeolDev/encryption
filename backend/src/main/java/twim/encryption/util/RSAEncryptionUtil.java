@@ -1,73 +1,171 @@
 package twim.encryption.util;
 
-import java.io.*;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
+
+import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
-import org.springframework.stereotype.Component;
 
 @Component
 public class RSAEncryptionUtil {
 
+	private static final int KEY_SIZE = 512;
 	/**
-	 * 1024비트 RSA 키쌍을 생성
+
+	 * 키페어 생성
+
 	 */
-	public static KeyPair genRSAKeyPair() throws NoSuchAlgorithmException {
-		KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
-		gen.initialize(256, new SecureRandom());
-		return gen.genKeyPair();
+
+	public static HashMap<String, String> createKeypairAsString() throws NoSuchAlgorithmException {
+
+		HashMap<String, String> stringKeypair = new HashMap<>();
+
+			SecureRandom secureRandom = new SecureRandom();
+
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+
+			keyPairGenerator.initialize(KEY_SIZE, secureRandom);
+
+			KeyPair keyPair = keyPairGenerator.genKeyPair();
+
+			PublicKey publicKey = keyPair.getPublic();
+
+			PrivateKey privateKey = keyPair.getPrivate();
+
+
+
+			String stringPublicKey = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
+
+			String stringPrivateKey = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
+
+
+
+			stringKeypair.put("publicKey", stringPublicKey);
+
+			stringKeypair.put("privateKey", stringPrivateKey);
+
+
+
+
+
+		return stringKeypair;
+
 	}
+
+
 
 	/**
-	 * Public Key로 RSA 암호화를 수행
-	 */
-	public static String encryptRSA(String plainText, PublicKey publicKey)
-			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
-			BadPaddingException, IllegalBlockSizeException {
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-		byte[] bytePlain = cipher.doFinal(plainText.getBytes());
-		return Base64.getEncoder().encodeToString(bytePlain);
+	 * 암호화
+
+	 */
+
+	public static String encode(String plainData, String stringPublicKey) {
+
+		String encryptedData = null;
+
+		try {
+
+			//평문으로 전달받은 공개키를 공개키객체로 만드는 과정
+
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			byte[] bytePublicKey = java.util.Base64.getDecoder().decode(stringPublicKey.getBytes());
+
+			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytePublicKey);
+
+			PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+
+
+			//만들어진 공개키객체를 기반으로 암호화모드로 설정하는 과정
+
+			Cipher cipher = Cipher.getInstance("RSA");
+
+			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+
+
+			//평문을 암호화하는 과정
+
+			byte[] byteEncryptedData = cipher.doFinal(plainData.getBytes());
+
+			encryptedData = java.util.Base64.getEncoder().encodeToString(byteEncryptedData);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return encryptedData;
+
 	}
+
+
 
 	/**
-	 * Private Key로 RSA 복호화를 수행
+
+	 * 복호화
+
 	 */
-	public static String decryptRSA(String encrypted, PrivateKey privateKey)
-			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
-			BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-		Cipher cipher = Cipher.getInstance("RSA");
-		byte[] byteEncrypted = Base64.getDecoder().decode(encrypted.getBytes());
 
-		cipher.init(Cipher.DECRYPT_MODE, privateKey);
-		byte[] bytePlain = cipher.doFinal(byteEncrypted);
-		return new String(bytePlain, "utf-8");
+	public static String decode(String encryptedData, String stringPrivateKey) {
+
+		String decryptedData = null;
+
+		try {
+
+			//평문으로 전달받은 개인키를 개인키객체로 만드는 과정
+
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+//			String str = stringPrivateKey.replaceAll(" ","");
+//			String str2 = stringPrivateKey.replaceAll("\\+", "%2B");
+//			String str4 = str2.replaceAll("=", "%3D");
+			String str3 = URLEncoder.encode(stringPrivateKey, "UTF-8");
+
+			byte[] bytePrivateKey = Base64.getMimeDecoder().decode((str3.getBytes()));
+
+			PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(bytePrivateKey);
+
+			PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+
+
+			//만들어진 개인키객체를 기반으로 암호화모드로 설정하는 과정
+
+			Cipher cipher = Cipher.getInstance("RSA");
+
+			cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+
+
+			//암호문을 평문화하는 과정
+
+			byte[] byteEncryptedData = Base64.getMimeDecoder().decode(encryptedData.getBytes());
+
+			byte[] byteDecryptedData = cipher.doFinal(byteEncryptedData);
+
+			decryptedData = new String(byteDecryptedData);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return decryptedData;
+
 	}
-
-	public static PublicKey getPublicKeyFromBase64Encrypted(String base64PublicKey)
-			throws NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] decodedBase64PubKey = Base64.getDecoder().decode(base64PublicKey);
-
-		return KeyFactory.getInstance("RSA")
-				.generatePublic(new X509EncodedKeySpec(decodedBase64PubKey));
-	}
-
-	public static PrivateKey getPrivateKeyFromBase64Encrypted(String base64PrivateKey)
-			throws NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] decodedBase64PrivateKey = Base64.getDecoder().decode(base64PrivateKey);
-
-		return KeyFactory.getInstance("RSA")
-				.generatePrivate(new PKCS8EncodedKeySpec(decodedBase64PrivateKey));
-	}
-  
 }
-
