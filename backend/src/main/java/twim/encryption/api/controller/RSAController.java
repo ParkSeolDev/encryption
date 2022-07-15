@@ -37,9 +37,9 @@ public class RSAController {
 	public String encrypt(@RequestParam(value = "plainText") String encryptText, String publicKey) throws Exception {
 		return rsaEncryptionUtil.encode(encryptText, publicKey);
 	}
-	
+
 	@PostMapping("/decrypt")
-	public String decrypt(@RequestParam(value = "encryptText") String encryptText,@RequestParam(value = "privateKey") String privateKey) throws Exception {
+	public String decrypt(@RequestParam(value = "encryptText") String encryptText, @RequestParam(value = "privateKey") String privateKey) throws Exception {
 		return rsaEncryptionUtil.decode(encryptText, privateKey);
 	}
 

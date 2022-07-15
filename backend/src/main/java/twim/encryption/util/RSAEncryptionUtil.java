@@ -6,6 +6,7 @@ import org.springframework.util.Base64Utils;
 
 import java.math.BigInteger;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -27,7 +28,7 @@ public class RSAEncryptionUtil {
 
 	 */
 
-	public static HashMap<String, String> createKeypairAsString() throws NoSuchAlgorithmException {
+	public HashMap<String, String> createKeypairAsString() throws NoSuchAlgorithmException {
 
 		HashMap<String, String> stringKeypair = new HashMap<>();
 
@@ -71,7 +72,7 @@ public class RSAEncryptionUtil {
 
 	 */
 
-	public static String encode(String plainData, String stringPublicKey) {
+	public String encode(String plainData, String stringPublicKey) {
 
 		String encryptedData = null;
 
@@ -121,7 +122,7 @@ public class RSAEncryptionUtil {
 
 	 */
 
-	public static String decode(String encryptedData, String stringPrivateKey) {
+	public String decode(String encryptedData, String stringPrivateKey) {
 
 		String decryptedData = null;
 
@@ -133,9 +134,9 @@ public class RSAEncryptionUtil {
 //			String str = stringPrivateKey.replaceAll(" ","");
 //			String str2 = stringPrivateKey.replaceAll("\\+", "%2B");
 //			String str4 = str2.replaceAll("=", "%3D");
-			String str3 = URLEncoder.encode(stringPrivateKey, "UTF-8");
+//			String str3 = URLEncoder.encode(stringPrivateKey, StandardCharsets.UTF_8);
 
-			byte[] bytePrivateKey = Base64.getMimeDecoder().decode((str3.getBytes()));
+			byte[] bytePrivateKey = Base64.getMimeDecoder().decode((stringPrivateKey.getBytes()));
 
 			PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(bytePrivateKey);
 

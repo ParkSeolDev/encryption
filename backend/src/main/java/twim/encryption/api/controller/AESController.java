@@ -1,32 +1,25 @@
 package twim.encryption.api.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import twim.encryption.util.AESEncryptionUtil;
+//import twim.encryption.util.AESEncryptionUtil;
+import twim.encryption.util.AES256Utils;
 
 @CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/aes")
 public class AESController {
-    private final AESEncryptionUtil aesEncryptionUtil;
-
+    private final AES256Utils aes256Utils;
 
     @PostMapping("/encrypt")
-    public String encrypt(String str) throws NoSuchAlgorithmException, GeneralSecurityException, UnsupportedEncodingException {
-        return aesEncryptionUtil.encrypt(str);
+    public String encrypt(String key, String data) throws Exception {
+        return aes256Utils.encrypt(key, data);
     }
 
     @PostMapping("/decrypt")
-    public String decrypt(String str) throws NoSuchAlgorithmException, GeneralSecurityException, UnsupportedEncodingException {
-        return aesEncryptionUtil.decrypt(str);
+    public String decrypt(@RequestParam String key, @RequestParam String encryptedData) throws Exception {
+        return aes256Utils.decrypt(key, encryptedData);
     }
 }
