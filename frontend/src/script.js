@@ -26,7 +26,7 @@ const decryptClick = function () {
 
 const dataClick = function () {
   decryptData();
-  console.log(dataResult);
+  console.log(dataResult.replace("[\\u0001-\\u0008\\u000B-\\u001F]", ""));
 };
 
 keyBtn.onclick = handleClick;
@@ -104,10 +104,11 @@ function decryptKey() {
       encryptText: keyEncrypted,
       privateKey: RSAprivateKey,
     }),
-  }).then((response) => (aesKey = response.text()));
+  })
+    // .then((response) => (aesKey = response.text()));
 
-  // .then((response) => response.json())
-  // .then((data) => console.log(data.toString()));
+    .then((response) => (aesKey = response.text()))
+    .then((data) => (aesKey = data.toString()));
 
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
   // }).then((response) => (aesKey = JSON.stringify(response)));
@@ -118,7 +119,7 @@ function decryptData() {
     method: "POST",
     cache: "no-cache",
     headers: {
-      "Content-Type": "application/json;charset=utf-8",
+      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
     },
     // body: formdata, // body 부분에 폼데이터 변수를 할당
     body: new URLSearchParams({
@@ -126,7 +127,9 @@ function decryptData() {
       key: aesKey,
       encryptedData: dataEncrypted,
     }),
-  }).then((response) => (dataResult = response.text()));
+  }).then(
+    (response) => (dataResult = response.text().then((data) => (dataResult = data.toString())))
+  );
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
 }
 /*

@@ -30,7 +30,7 @@ public class AES256Utils {
             return new String(Base64.getEncoder().encode(encrypted));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException
                 | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            log.error("AES Util Encrypt Error",  e);
+            log.error("AES Util Encrypt Error", e);
         }
         return key;
     }
@@ -38,13 +38,13 @@ public class AES256Utils {
     public String decrypt(final String key, final String encryptedData) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         byte[] keyData;
 
-            keyData = key.getBytes(StandardCharsets.UTF_8);
-            byte[] ivData = key.substring(0, 16).getBytes(StandardCharsets.UTF_8);
-            SecretKey secretKey = new SecretKeySpec(keyData, "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(ivData));
-            byte[] decrypted = Base64.getMimeDecoder().decode(encryptedData.getBytes(StandardCharsets.UTF_8));
-            return new String(cipher.doFinal(decrypted), StandardCharsets.UTF_8);
+        keyData = key.getBytes(StandardCharsets.UTF_8);
+        byte[] ivData = key.substring(0, 16).getBytes(StandardCharsets.UTF_8);
+        SecretKey secretKey = new SecretKeySpec(keyData, "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(ivData));
+        byte[] decrypted = Base64.getMimeDecoder().decode(encryptedData.getBytes(StandardCharsets.UTF_8));
+        return new String(cipher.doFinal(decrypted), StandardCharsets.UTF_8);
 
     }
 }
