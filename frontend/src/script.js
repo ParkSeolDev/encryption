@@ -132,39 +132,6 @@ function decryptData() {
   );
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
 }
-/*
-function decryptKey() {
-  axios.post(
-    "http://localhost:8080/api/v1/rsa/decrypt",
-    {
-      encryptText: keyEncrypted,
-      privateKey: privateKey,
-    },
-    {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    }
-  ).then((response) => {
-    console.log('success', response.data)
-  }).catch((error) => {
-    console.log('error', error)
-  })
-}
-*/
-
-// $.ajax({
-//   url:"http://localhost:8080/api/v1/rsa/decryptByPrivateKey",
-//   type:'POST',
-//   data: encrypted,
-//   success:function(data){
-//       alert("완료!");
-//       window.opener.location.reload();
-//       self.close();
-//   },
-//   error:function(jqXHR, textStatus, errorThrown){
-//       alert("에러 발생~~ \n" + textStatus + " : " + errorThrown);
-//       self.close();
-//   }
-// });
 
 document.querySelector("#encrypt").addEventListener("click", function () {
   const encrypt = new JSEncrypt();
