@@ -5,7 +5,7 @@ const datakeyBtn = document.getElementById("datakey-btn");
 const request = new XMLHttpRequest();
 const api = `http://localhost:8080/api/v1/rsa/generateKey`;
 var data1 = "선행연구팀 박설";
-var key = "";
+var RSApublicKey = "";
 var num = "";
 var dataEncrypted = "";
 var RSAprivateKey = "";
@@ -44,15 +44,15 @@ function getKey() {
   request.open("GET", api);
   request.onload = () => {
     console.log(request.response);
-    key = JSON.parse(request.response).publicKey;
+    RSApublicKey = JSON.parse(request.response).publicKey;
     RSAprivateKey = JSON.parse(request.response).privateKey;
-    console.log(key);
+    console.log(RSApublicKey);
     // num : 대칭키
     num = guid();
     console.log("대칭키= " + num);
 
     const encrypt = new JSEncrypt();
-    encrypt.setPublicKey(key);
+    encrypt.setPublicKey(RSApublicKey);
     keyEncrypted = encrypt.encrypt(num);
 
     console.log("대칭키 암호화= " + keyEncrypted);
@@ -133,16 +133,16 @@ function decryptData() {
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
 }
 
-document.querySelector("#encrypt").addEventListener("click", function () {
-  const encrypt = new JSEncrypt();
-  encrypt.setPublicKey(document.querySelector("#pubkey").value);
-  const result = encrypt.encrypt(document.querySelector("#input").value);
-  document.querySelector("#encrypted").value = result;
-});
+// document.querySelector("#encrypt").addEventListener("click", function () {
+//   const encrypt = new JSEncrypt();
+//   encrypt.setPublicKey(document.querySelector("#pubkey").value);
+//   const result = encrypt.encrypt(document.querySelector("#input").value);
+//   document.querySelector("#encrypted").value = result;
+// });
 
-document.querySelector("#decrypt").addEventListener("click", function () {
-  const decrypt = new JSEncrypt();
-  decrypt.setPrivateKey(document.querySelector("#privkey").value);
-  const text = decrypt.decrypt(document.querySelector("#encrypted").value);
-  document.querySelector("#decrypted").value = text;
-});
+// document.querySelector("#decrypt").addEventListener("click", function () {
+//   const decrypt = new JSEncrypt();
+//   decrypt.setPrivateKey(document.querySelector("#privkey").value);
+//   const text = decrypt.decrypt(document.querySelector("#encrypted").value);
+//   document.querySelector("#decrypted").value = text;
+// });
