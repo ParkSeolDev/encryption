@@ -5,7 +5,7 @@ const datakeyBtn = document.getElementById("datakey-btn");
 const request = new XMLHttpRequest();
 const api = `http://localhost:8080/api/v1/rsa/generateKey`;
 var data1 = "선행연구팀 박설";
-var key = "";
+var RSApublicKey = "";
 var num = "";
 var dataEncrypted = "";
 var RSAprivateKey = "";
@@ -44,15 +44,15 @@ function getKey() {
   request.open("GET", api);
   request.onload = () => {
     console.log(request.response);
-    key = JSON.parse(request.response).publicKey;
-    RSAprivateKey = JSON.parse(request.response).privateKey;
-    console.log(key);
+    RSApublicKey = JSON.parse(request.response);
+    // RSAprivateKey = JSON.parse(request.response).privateKey;
+    console.log(RSApublicKey);
     // num : 대칭키
     num = guid();
     console.log("대칭키= " + num);
 
     const encrypt = new JSEncrypt();
-    encrypt.setPublicKey(key);
+    encrypt.setPublicKey(RSApublicKey);
     keyEncrypted = encrypt.encrypt(num);
 
     console.log("대칭키 암호화= " + keyEncrypted);
@@ -76,8 +76,8 @@ function encodeByAES(key, data) {
 const requestPost = new XMLHttpRequest();
 const apiPost = `http://localhost:8080/api/v1/rsa/decrypt`;
 
-formdata.append("encryptText", keyEncrypted);
-formdata.append("privateKey", RSAprivateKey);
+// formdata.append("encryptText", keyEncrypted);
+// formdata.append("privateKey", RSAprivateKey);
 /*
 function decryptKey() {
   console.log("sssss");
