@@ -43,7 +43,7 @@ function guid() {
 function getKey() {
   request.open("GET", api);
   request.onload = () => {
-    console.log(request.response);
+    // console.log(request.response);
     RSApublicKey = request.response;
     // RSAprivateKey = JSON.parse(request.response).privateKey;
 
