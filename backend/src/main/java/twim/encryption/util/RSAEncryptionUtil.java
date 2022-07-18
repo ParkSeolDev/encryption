@@ -23,9 +23,9 @@ public class RSAEncryptionUtil {
 
 	 */
 
-	public Map<String, String> createKeypairAsString() throws NoSuchAlgorithmException {
+	public HashMap<String, String> createKeypairAsString() throws NoSuchAlgorithmException {
 
-		Map<String, String> stringKeypair = new HashMap<>();
+		HashMap<String, String> stringKeypair = new HashMap<>();
 
 			SecureRandom secureRandom = new SecureRandom();
 
@@ -42,8 +42,8 @@ public class RSAEncryptionUtil {
 			String stringPublicKey = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
 			String stringPrivateKey = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
 
-			stringKeypair.put("publicKey", stringPublicKey);
-			stringKeypair.put("privateKey", stringPrivateKey);
+			stringKeypair.put("publickey", stringPublicKey);
+			stringKeypair.put("privatekey", stringPrivateKey);
 
 		return stringKeypair;
 

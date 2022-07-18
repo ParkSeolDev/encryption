@@ -9,6 +9,7 @@ import twim.encryption.util.RSAEncryptionUtil;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -20,9 +21,8 @@ public class RSAService {
 
     @Transactional
     public String generateKey() throws NoSuchAlgorithmException, IOException {
-        Map<String, String> stringKeypair = rsaEncryptionUtil.createKeypairAsString();
+        HashMap<String, String> stringKeypair = rsaEncryptionUtil.createKeypairAsString();
         Twimkey key = keyRepository.save(stringKeypair);
-        Iterator<String> keys = key.getTwimmap().keySet().iterator();
-        return keys.next();
+        return key.getPublickey();
     }
 }
