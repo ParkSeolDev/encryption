@@ -1,4 +1,3 @@
-
 const keyBtn = document.getElementById("key-btn");
 const dkeyBtn = document.getElementById("dkey-btn");
 const datakeyBtn = document.getElementById("datakey-btn");
