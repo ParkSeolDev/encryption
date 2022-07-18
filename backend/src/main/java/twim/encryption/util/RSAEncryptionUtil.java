@@ -42,8 +42,9 @@ public class RSAEncryptionUtil {
 			String stringPublicKey = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
 			String stringPrivateKey = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
 
-			stringKeypair.put("publickey", stringPublicKey);
-			stringKeypair.put("privatekey", stringPrivateKey);
+			stringKeypair.put(stringPublicKey, stringPrivateKey);
+//			stringKeypair.put("key", stringPublicKey);
+//			stringKeypair.put("value", stringPrivateKey);
 
 		return stringKeypair;
 
