@@ -133,16 +133,16 @@ function decryptData() {
   // }).then((response) => (aesKey = JSON.parse(response).toString()));
 }
 
-document.querySelector("#encrypt").addEventListener("click", function () {
-  const encrypt = new JSEncrypt();
-  encrypt.setPublicKey(document.querySelector("#pubkey").value);
-  const result = encrypt.encrypt(document.querySelector("#input").value);
-  document.querySelector("#encrypted").value = result;
-});
+// document.querySelector("#encrypt").addEventListener("click", function () {
+//   const encrypt = new JSEncrypt();
+//   encrypt.setPublicKey(document.querySelector("#pubkey").value);
+//   const result = encrypt.encrypt(document.querySelector("#input").value);
+//   document.querySelector("#encrypted").value = result;
+// });
 
-document.querySelector("#decrypt").addEventListener("click", function () {
-  const decrypt = new JSEncrypt();
-  decrypt.setPrivateKey(document.querySelector("#privkey").value);
-  const text = decrypt.decrypt(document.querySelector("#encrypted").value);
-  document.querySelector("#decrypted").value = text;
-});
+// document.querySelector("#decrypt").addEventListener("click", function () {
+//   const decrypt = new JSEncrypt();
+//   decrypt.setPrivateKey(document.querySelector("#privkey").value);
+//   const text = decrypt.decrypt(document.querySelector("#encrypted").value);
+//   document.querySelector("#decrypted").value = text;
+// });
