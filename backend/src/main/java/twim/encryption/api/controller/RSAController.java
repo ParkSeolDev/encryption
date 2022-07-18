@@ -40,8 +40,8 @@ public class RSAController {
 	}
 
 	@PostMapping("/decrypt")
-	public String decrypt(@RequestParam(value = "encryptText") String encryptText, @RequestParam(value = "privateKey") String privateKey) throws Exception {
-		return rsaEncryptionUtil.decode(encryptText, privateKey);
+	public String decrypt(@RequestParam(value = "encryptText") String encryptText, @RequestParam(value = "publicKey") String publicKey) throws Exception {
+		return rsaService.decode(encryptText, publicKey);
 	}
 
 }

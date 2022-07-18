@@ -25,4 +25,9 @@ public class RSAService {
         Twimkey key = keyRepository.save(stringKeypair);
         return key.getPublickey();
     }
+
+    public String decode(String encryptText, String publicKey) {
+        String privateKey = keyRepository.getPrivateKey(publicKey);
+        return rsaEncryptionUtil.decode(encryptText, privateKey);
+    }
 }

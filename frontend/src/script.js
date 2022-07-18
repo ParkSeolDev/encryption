@@ -44,7 +44,7 @@ function getKey() {
   request.open("GET", api);
   request.onload = () => {
     console.log(request.response);
-    RSApublicKey = JSON.parse(request.response);
+    RSApublicKey = request.response;
     // RSAprivateKey = JSON.parse(request.response).privateKey;
     console.log(RSApublicKey);
     // num : 대칭키
@@ -102,7 +102,7 @@ function decryptKey() {
     body: new URLSearchParams({
       // 일반 객체를 fordata형식으로 변환해주는 클래스
       encryptText: keyEncrypted,
-      privateKey: RSAprivateKey,
+      publicKey: RSApublicKey,
     }),
   })
     // .then((response) => (aesKey = response.text()));
