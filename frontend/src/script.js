@@ -1,4 +1,4 @@
-// const key = document.getElementById("key")
+
 const keyBtn = document.getElementById("key-btn");
 const dkeyBtn = document.getElementById("dkey-btn");
 const datakeyBtn = document.getElementById("datakey-btn");
@@ -44,8 +44,9 @@ function getKey() {
   request.open("GET", api);
   request.onload = () => {
     console.log(request.response);
-    RSApublicKey = JSON.parse(request.response).publicKey;
-    RSAprivateKey = JSON.parse(request.response).privateKey;
+    RSApublicKey = request.response;
+    // RSAprivateKey = JSON.parse(request.response).privateKey;
+
     console.log(RSApublicKey);
     // num : 대칭키
     num = guid();
@@ -76,8 +77,8 @@ function encodeByAES(key, data) {
 const requestPost = new XMLHttpRequest();
 const apiPost = `http://localhost:8080/api/v1/rsa/decrypt`;
 
-formdata.append("encryptText", keyEncrypted);
-formdata.append("privateKey", RSAprivateKey);
+// formdata.append("encryptText", keyEncrypted);
+// formdata.append("privateKey", RSAprivateKey);
 /*
 function decryptKey() {
   console.log("sssss");
@@ -102,7 +103,7 @@ function decryptKey() {
     body: new URLSearchParams({
       // 일반 객체를 fordata형식으로 변환해주는 클래스
       encryptText: keyEncrypted,
-      privateKey: RSAprivateKey,
+      publicKey: RSApublicKey,
     }),
   })
     // .then((response) => (aesKey = response.text()));

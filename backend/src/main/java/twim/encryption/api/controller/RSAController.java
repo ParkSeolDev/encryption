@@ -3,11 +3,11 @@ package twim.encryption.api.controller;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import twim.encryption.api.service.RSAService;
 import twim.encryption.util.RSAEncryptionUtil;
 
 import java.io.IOException;
 import java.security.*;
-import java.util.HashMap;
 
 
 @CrossOrigin("*")
@@ -16,11 +16,12 @@ import java.util.HashMap;
 @RequestMapping("/api/v1/rsa")
 public class RSAController {
 	
+	private final RSAService rsaService;
 	private final RSAEncryptionUtil rsaEncryptionUtil;
 
 	@GetMapping("/generateKey")
-	public HashMap<String, String> generateKey() throws NoSuchAlgorithmException, IOException {
-		return rsaEncryptionUtil.createKeypairAsString();
+	public String generateKey() throws NoSuchAlgorithmException, IOException {
+		return rsaService.generateKey();
 	}
 	
 //	@GetMapping("/getPublicKey")
@@ -39,8 +40,8 @@ public class RSAController {
 	}
 
 	@PostMapping("/decrypt")
-	public String decrypt(@RequestParam(value = "encryptText") String encryptText, @RequestParam(value = "privateKey") String privateKey) throws Exception {
-		return rsaEncryptionUtil.decode(encryptText, privateKey);
+	public String decrypt(@RequestParam(value = "encryptText") String encryptText, @RequestParam(value = "publicKey") String publicKey) throws Exception {
+		return rsaService.decode(encryptText, publicKey);
 	}
 
 }

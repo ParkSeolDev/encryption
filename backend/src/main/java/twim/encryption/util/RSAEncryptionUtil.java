@@ -1,14 +1,8 @@
 package twim.encryption.util;
 
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 
-import java.math.BigInteger;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -25,6 +19,7 @@ public class RSAEncryptionUtil {
 	/**
 
 	 * 키페어 생성
+	 * @return
 
 	 */
 
@@ -41,24 +36,15 @@ public class RSAEncryptionUtil {
 			KeyPair keyPair = keyPairGenerator.genKeyPair();
 
 			PublicKey publicKey = keyPair.getPublic();
-
 			PrivateKey privateKey = keyPair.getPrivate();
 
 
-
 			String stringPublicKey = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
-
 			String stringPrivateKey = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
 
-
-
-			stringKeypair.put("publicKey", stringPublicKey);
-
-			stringKeypair.put("privateKey", stringPrivateKey);
-
-
-
-
+			stringKeypair.put(stringPublicKey, stringPrivateKey);
+//			stringKeypair.put("key", stringPublicKey);
+//			stringKeypair.put("value", stringPrivateKey);
 
 		return stringKeypair;
 
