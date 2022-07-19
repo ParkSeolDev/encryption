@@ -73,8 +73,8 @@ function encodeByAES(key, data) {
   return cipher.toString();
 }
 
-const requestPost = new XMLHttpRequest();
-const apiPost = `http://localhost:8080/api/v1/rsa/decrypt`;
+// const requestPost = new XMLHttpRequest();
+// const apiPost = `http://localhost:8080/api/v1/rsa/decrypt`;
 
 // formdata.append("encryptText", keyEncrypted);
 // formdata.append("privateKey", RSAprivateKey);
