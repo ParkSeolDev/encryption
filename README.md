@@ -2,7 +2,7 @@
 - email address : parkseol.dev@gmail.com
 
 ## Introduction
-소규모 가게 운영 프로그램
+암호화 과제
 
 ## Development Environment
 - mysql @8.0.27
